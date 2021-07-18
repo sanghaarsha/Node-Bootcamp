@@ -1,67 +1,61 @@
-// core modules
 const fs = require("fs");
-
-// npm modules
 const express = require("express");
 const app = express();
 
 // middlewares
-app.use(express.json()); // for parsing requests
+app.use(express.json());
 
 // dotenv setup
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
-//Blocking Codes : (because, before event loop : only happens once)
+// reading from json file and parsing
 const tours = JSON.parse(
   fs.readFileSync(__dirname + "/dev-data/data/tours-simple.json")
 );
 
-// Non Blocking Codes (runs every time req is received):
-// GET ROUTES
-app.get("/api/v1/tours", (req, res) => {
+// Handler Functions
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
     results: tours.length,
     data: { tours },
   });
-});
+};
 
-app.get("/api/v1/tours/:id", (req, res) => {
-  const reqId = req.params.id * 1; //(*1 for changing to int type)
-
+const getTourById = (req, res) => {
+  const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
-
-  // checking if tour exists and responding accordingly
   if (tour) {
-    res.status(200).json({
+    res
+    .status(200)
+    .json({
       status: "success",
       data: {
         tour: tour,
       },
     });
   } else {
-    res.status(404).json({ status: "failed", message: "Invalid ID" });
+    res
+    .status(404)
+    .json({ status: "failed", message: "Invalid ID" });
   }
-});
+};
 
-// POST requests
-app.post("/api/v1/tours", (req, res) => {
+const postNewTour = (req, res) => {
   console.log(req.body);
   const newID = tours.length;
-
-  // creating new object by merging to existing objects
   const newObj = Object.assign({ id: newID }, req.body);
   tours.push(newObj);
-
-  // as we do not want to lock the event loop, we will use async fs.writeFile
   fs.writeFile(
     __dirname + "/dev-data/data/tours-simple.json",
     JSON.stringify(tours),
     (err) => {
       if (err) console.log(err);
 
-      res.status(201).json({
+      res
+      .status(201)
+      .json({
         status: "success",
         data: {
           tour: newObj,
@@ -69,37 +63,44 @@ app.post("/api/v1/tours", (req, res) => {
       });
     }
   );
-});
+};
 
-// PATCH requests
-app.patch("/api/v1/tours/:id", (req, res) => {
+const patchTour = (req, res) => {
   const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
 
   console.log(req.body);
 
-  // update done here :
   if (tour) {
-    // lets not update for now just send this object
     res
       .status(200)
       .json({ todo: "Update This!", receivedId: reqId, toUpdate: tour });
   } else {
     res.status(404).json({ status: "failed", message: "Invalid ID" });
   }
-});
+};
 
-// DELETE request
-app.delete("/api/v1/tours/:id", (req, res) => {
+const deleteTour = (req, res) => {
   const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
   if (tour) {
-    // lets not delete for now just send this object
     res.status(204).json({ status: "success", data: null });
   } else {
     res.status(404).json({ status: "failed", message: "Invalid ID" });
   }
-});
+};
+
+// Routes
+app
+.route("/api/v1/tours")
+.get(getAllTours)
+.post(postNewTour);
+
+app
+  .route("/api/v1/tours/:id")
+  .get(getTourById)
+  .patch(patchTour)
+  .delete(deleteTour);
 
 // Listen the app at PORT
 app.listen(PORT, () => {
