@@ -18,12 +18,31 @@ const tours = JSON.parse(
 );
 
 // Non Blocking Codes (runs every time req is received):
+// GET ROUTES
 app.get("/api/v1/tours", (req, res) => {
   res.status(200).json({
     status: "success",
     results: tours.length,
     data: { tours },
   });
+});
+
+app.get("/api/v1/tours/:id", (req, res) => {
+  const reqId = req.params.id * 1; //(*1 for changing to int type)
+
+  const tour = tours.find((el) => el.id === reqId);
+
+  // checking if tour exists and responding accordingly
+  if (tour) {
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour: tour,
+      },
+    });
+  } else {
+    res.status(404).json({ status: "failed", message: "Invalid ID" });
+  }
 });
 
 // POST requests
@@ -50,7 +69,6 @@ app.post("/api/v1/tours", (req, res) => {
       });
     }
   );
-
 });
 
 app.listen(PORT, () => {
