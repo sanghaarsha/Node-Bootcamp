@@ -111,7 +111,7 @@ const getAllUsers = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  res.status(500).send("Create users route!");
+  res.status(500).send("Create user route!");
 };
 
 const getUser = (req, res) => {
@@ -126,23 +126,22 @@ const deleteUser = (req, res) => {
   res.status(500).send("Delete user route!");
 };
 
-//  Main API Routes
-app.route("/api/v1/tours").get(getAllTours).post(postNewTour);
+// Declaring Express Routers
+const tourRouter = express.Router();
+const userRouter = express.Router();
 
-app
-  .route("/api/v1/tours/:id")
-  .get(getTourById)
-  .patch(patchTour)
-  .delete(deleteTour);
+// Mounting Express Router
+app.use("/api/v1/tours", tourRouter);
+app.use("/api/v1/users", userRouter);
+
+// Tour routes
+tourRouter.route("/").get(getAllTours).post(postNewTour);
+tourRouter.route("/:id").get(getTourById).patch(patchTour).delete(deleteTour);
 
 // User Routes
-app.route("/api/v1/users").get(getAllUsers).post(createUser);
+userRouter.route("/").get(getAllUsers).post(createUser);
 
-app
-  .route("/api/v1/users/:id")
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+userRouter.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 // Listen the app at PORT
 app.listen(PORT, () => {
