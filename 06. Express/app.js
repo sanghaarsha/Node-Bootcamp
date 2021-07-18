@@ -81,12 +81,27 @@ app.patch("/api/v1/tours/:id", (req, res) => {
   // update done here :
   if (tour) {
     // lets not update for now just send this object
-    res.status(200).json({ receivedId: reqId, toUpdate: tour });
+    res
+      .status(200)
+      .json({ todo: "Update This!", receivedId: reqId, toUpdate: tour });
   } else {
     res.status(404).json({ status: "failed", message: "Invalid ID" });
   }
 });
 
+// DELETE request
+app.delete("/api/v1/tours/:id", (req, res) => {
+  const reqId = req.params.id * 1;
+  const tour = tours.find((el) => el.id === reqId);
+  if (tour) {
+    // lets not delete for now just send this object
+    res.status(204).json({ status: "success", data: null });
+  } else {
+    res.status(404).json({ status: "failed", message: "Invalid ID" });
+  }
+});
+
+// Listen the app at PORT
 app.listen(PORT, () => {
   console.log(`App live at http://localhost:${PORT}`);
 });
