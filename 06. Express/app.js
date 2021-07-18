@@ -107,23 +107,23 @@ const deleteTour = (req, res) => {
 
 // User Route Handlers
 const getAllUsers = (req, res) => {
-  
+  res.status(500).send("Get all users route!");
 };
 
 const createUser = (req, res) => {
-  
+  res.status(500).send("Create users route!");
 };
 
 const getUser = (req, res) => {
-  
+  res.status(500).send("Get single user route!");
 };
 
 const updateUser = (req, res) => {
-  
+  res.status(500).send("Update user route!");
 };
 
 const deleteUser = (req, res) => {
-  
+  res.status(500).send("Delete user route!");
 };
 
 //  Main API Routes
