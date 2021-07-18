@@ -1,9 +1,11 @@
 const fs = require("fs");
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
 // middlewares
 //('global' middlewares fires up for every request is made)
+app.use(morgan("dev"));
 app.use(express.json()); // express built-in middleware
 // custom middleware:
 app.use((req, res, next) => {
@@ -25,7 +27,7 @@ const tours = JSON.parse(
   fs.readFileSync(__dirname + "/dev-data/data/tours-simple.json")
 );
 
-// Handler Functions
+// Route Handlers
 const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
