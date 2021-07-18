@@ -71,6 +71,22 @@ app.post("/api/v1/tours", (req, res) => {
   );
 });
 
+// PATCH requests
+app.patch("/api/v1/tours/:id", (req, res) => {
+  const reqId = req.params.id * 1;
+  const tour = tours.find((el) => el.id === reqId);
+
+  console.log(req.body);
+
+  // update done here :
+  if (tour) {
+    // lets not update for now just send this object
+    res.status(200).json({ receivedId: reqId, toUpdate: tour });
+  } else {
+    res.status(404).json({ status: "failed", message: "Invalid ID" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`App live at http://localhost:${PORT}`);
 });
