@@ -1,22 +1,9 @@
 const fs = require("fs");
 const express = require("express");
-const morgan = require("morgan");
 const app = express();
 
 // middlewares
-//('global' middlewares fires up for every request is made)
-app.use(morgan("dev"));
 app.use(express.json()); // express built-in middleware
-// custom middleware:
-app.use((req, res, next) => {
-  console.log("Hello, from the middleware!");
-  next();
-});
-
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
 
 // dotenv setup
 require("dotenv").config();
@@ -27,7 +14,7 @@ const tours = JSON.parse(
   fs.readFileSync(__dirname + "/dev-data/data/tours-simple.json")
 );
 
-// Route Handlers
+// API Route Handlers
 const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -39,16 +26,11 @@ const getAllTours = (req, res) => {
 };
 
 const getTourById = (req, res) => {
-  // accessing the time inserted into req object from custom middleware
-  console.log(req.requestTime);
-
   const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
   if (tour) {
     res.status(200).json({
       status: "success",
-      // can also send this in a response
-      requestedAt: req.requestTime,
       data: {
         tour: tour,
       },
@@ -123,7 +105,28 @@ const deleteTour = (req, res) => {
   }
 };
 
-// Routes
+// User Route Handlers
+const getAllUsers = (req, res) => {
+  
+};
+
+const createUser = (req, res) => {
+  
+};
+
+const getUser = (req, res) => {
+  
+};
+
+const updateUser = (req, res) => {
+  
+};
+
+const deleteUser = (req, res) => {
+  
+};
+
+//  Main API Routes
 app.route("/api/v1/tours").get(getAllTours).post(postNewTour);
 
 app
@@ -132,7 +135,14 @@ app
   .patch(patchTour)
   .delete(deleteTour);
 
-app.use((abc, def) => def.status(404).send("resource not found!"));
+// User Routes
+app.route("/api/v1/users").get(getAllUsers).post(createUser);
+
+app
+  .route("/api/v1/users/:id")
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 // Listen the app at PORT
 app.listen(PORT, () => {
