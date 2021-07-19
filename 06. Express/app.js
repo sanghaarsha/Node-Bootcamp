@@ -8,6 +8,9 @@ const userRouter = require("./routes/userRoutes");
 // middlewares
 app.use(express.json());
 
+// serving static files
+app.use(express.static(__dirname + "/public"));
+
 // Mounting Express Router
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
