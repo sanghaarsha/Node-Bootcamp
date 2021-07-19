@@ -5,6 +5,17 @@ const tours = JSON.parse(
   fs.readFileSync(__dirname + "/../dev-data/data/tours-simple.json")
 );
 
+// creating checkID params middleware to check if requested item exists
+exports.checkID = (req, res, next, val) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: "failed",
+      message: "Invalid ID",
+    });
+  }
+  next();
+};
+
 exports.getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -18,23 +29,15 @@ exports.getAllTours = (req, res) => {
 exports.getTourById = (req, res) => {
   const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
-  if (tour) {
-    res.status(200).json({
-      status: "success",
-      data: {
-        tour: tour,
-      },
-    });
-  } else {
-    res.status(404).json({
-      status: "failed",
-      message: "Invalid ID",
-    });
-  }
+  res.status(200).json({
+    status: "success",
+    data: {
+      tour: tour,
+    },
+  });
 };
 
 exports.postNewTour = (req, res) => {
-  console.log(req.body);
   const newID = tours.length;
   const newObj = Object.assign(
     {
@@ -65,32 +68,18 @@ exports.patchTour = (req, res) => {
 
   console.log(req.body);
 
-  if (tour) {
-    res.status(200).json({
-      todo: "Update This!",
-      receivedId: reqId,
-      toUpdate: tour,
-    });
-  } else {
-    res.status(404).json({
-      status: "failed",
-      message: "Invalid ID",
-    });
-  }
+  res.status(200).json({
+    todo: "Update This!",
+    receivedId: reqId,
+    toUpdate: tour,
+  });
 };
 
 exports.deleteTour = (req, res) => {
   const reqId = req.params.id * 1;
   const tour = tours.find((el) => el.id === reqId);
-  if (tour) {
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } else {
-    res.status(404).json({
-      status: "failed",
-      message: "Invalid ID",
-    });
-  }
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
 };

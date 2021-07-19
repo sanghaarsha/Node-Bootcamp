@@ -1,3 +1,14 @@
+exports.checkId = (req, res, next, val) => {
+  // sample checking of id for test only
+  if (val > 10) {
+    return res.status(404).json({
+      status: "failed",
+      message: "invalid ID",
+    });
+  }
+  next();
+};
+
 exports.getAllUsers = (req, res) => {
   res.status(500).send("Get all users route!");
 };
