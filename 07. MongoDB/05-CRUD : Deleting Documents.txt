@@ -1,0 +1,13 @@
+// deleteOne
+> db.tours.deleteOne({ price:{$lt:200}  })
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.tours.find()
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163ca"), "name" : "The Sea Explorer", "price" : 497, "rating" : 4.6 }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy", "premium" : true }
+
+// deleteMany
+> db.tours.deleteMany({ rating:{$lt:4.9}  })
+{ "acknowledged" : true, "deletedCount" : 2 }
+> db.tours.find()
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy", "premium" : true }
