@@ -20,6 +20,12 @@ mongoose
   })
   .then(() => console.log("successfully connected!"));
 
+// Creating mongoose schema and model
+// in order to create model we need schemas 
+// model are like blueprints, that help us in CRUD operations
+
+
+// Listening app
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App running on http://localhost:${port}`);
