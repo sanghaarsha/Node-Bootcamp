@@ -21,9 +21,27 @@ mongoose
   .then(() => console.log("successfully connected!"));
 
 // Creating mongoose schema and model
-// in order to create model we need schemas 
+// in order to create model we need schemas
 // model are like blueprints, that help us in CRUD operations
-
+// Creating Schema:
+const tourSchema = new mongoose.Schema({
+  name: {
+    // schema type options
+    type: String,
+    required: [true, "A tour must have a name!"],
+    unique: true,
+  },
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    required: [true, "A tour must have a price"],
+  },
+});
+// Creating Model:
+const Tour = mongoose.model("Tour", tourSchema);
 
 // Listening app
 const port = process.env.PORT || 3000;
