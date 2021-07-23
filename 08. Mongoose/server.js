@@ -28,7 +28,7 @@ const tourSchema = new mongoose.Schema({
   name: {
     // schema type options
     type: String,
-    required: [true, "A tour must have a name!"],
+    required: [true, "A tour must have a name!"], // validator
     unique: true,
   },
   rating: {
@@ -42,6 +42,19 @@ const tourSchema = new mongoose.Schema({
 });
 // Creating Model:
 const Tour = mongoose.model("Tour", tourSchema);
+
+const testTour = new Tour({
+  name: "The Park Camper",
+  rating: 4.8,
+  price: 255,
+});
+
+testTour
+  .save()
+  .then(doc => {
+    console.log(doc);
+  })
+  .catch(err => console.log(err));
 
 // Listening app
 const port = process.env.PORT || 3000;
