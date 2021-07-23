@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+require("dotenv").config();
 const app = require("./app");
-
-dotenv.config({ path: "./config.env" });
 
 // configuring mongodb atlas
 const DB_URI = process.env.DB_URI.replace(
