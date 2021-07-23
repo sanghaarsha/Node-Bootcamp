@@ -1,0 +1,41 @@
+s// Querying all the documents inside a collection
+> db.tours.find()
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker", "price" : 297, "rating" : 4.7 }
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163ca"), "name" : "The Sea Explorer", "price" : 497, "rating" : 4.6 }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy" }
+
+// Querying for a document by a criteria passed
+> db.tours.find({name: "The mystic one"})
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+
+> db.tours.find({difficulty: "easy"})
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy" }
+
+// Querying using some special Query Operators
+// $lte : less than or equals to , $ = sign for mongo operator
+> db.tours.find({price: {$lte:300} })
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker", "price" : 297, "rating" : 4.7 }
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+
+// Querying using two search criteria :
+
+// and query
+> db.tours.find( { price: {$lte:300}, rating: {$gte:4.8} } )
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+
+// or query
+> db.tours.find({ $or: [ {price: {$lte:300}}, {rating:{$gte:4.8}} ]})
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker", "price" : 297, "rating" : 4.7 }
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one", "price" : 300, "rating" : 4.8 }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy" }
+
+// the object passed inside find method is called filter object.
+
+// along with filter object we can also pass another object called projection, it helps us select fields in output
+// i.e :
+// this only shows name for returned documents
+> db.tours.find({ $or: [ {price: {$lte:300}}, {rating:{$gte:4.8}} ]}, {name:1})
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker" }
+{ "_id" : ObjectId("60fa5900ae1ffd762d7a1a90"), "name" : "The mystic one" }
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer" }
