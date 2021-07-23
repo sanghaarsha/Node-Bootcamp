@@ -1,0 +1,22 @@
+// updateOne : updating one document (if multiple of same name are found only first one is updated)
+> db.tours.updateOne( {name: "The Forest Hiker"}, {$set: {name: "The Green Man"} } )
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+// updating multiple data of one document
+> db.tours.updateOne( {name: "The Green Man"}, {$set: {name: "The Forest Hiker", price:197} } )
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.tours.find()
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker", "price" : 197, "rating" : 4.7 }
+
+
+
+// updateMany : update all documents with matching query
+> db.tours.updateMany({ price:{$gte:500}, rating:{$gte:4.8} }, { $set: {premium:true} })
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+//previous value:
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy" }
+//updated value:
+{ "_id" : ObjectId("60fa5c805cf1eb9e148163cb"), "name" : "The Snow Adventurer", "price" : 997, "rating" : 4.9, "difficulty" : "easy", "premium" : true }
+
+// above two methods update documents partially, to complete replace previous values, we use 'replace'
+db.tours.replaceOne({searchQuery}, {newValue})
+db.tours.replaceMany({searchQuery}, {newValue})
