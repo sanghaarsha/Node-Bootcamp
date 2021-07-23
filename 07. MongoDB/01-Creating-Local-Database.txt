@@ -1,0 +1,43 @@
+// 'use' switches to a database or creates one if it does not exist
+> use natours-test
+switched to db natours-test
+
+// 'db' shows all database
+> db
+natours-test
+
+// natours-test is a database, tours is a collection,
+// collection.insertOne : inerts a document inside a collection
+> db.tours.insertOne( { name:"The Forest Hiker", price:297, rating: 4.7} )
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("60fa552d6e973289f554a390")
+}
+
+> db 
+natours-test
+
+// collection.find() shows all documents inside a collection
+> db.tours.find()
+{ "_id" : ObjectId("60fa552d6e973289f554a390"), "name" : "The Forest Hiker", "price" : 297, "rating" : 4.7 }
+
+// shows all databases
+> show dbs
+admin         0.000GB
+config        0.000GB
+local         0.000GB
+natours-test  0.000GB
+
+> use admin
+switched to db admin
+
+> use natours-test
+switched to db natours-test
+
+// 'show collection' to view all collections
+> show collections
+tours
+
+> exit
+bye
+
