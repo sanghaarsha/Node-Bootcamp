@@ -4,10 +4,6 @@ const tourController = require("../controllers/tourController");
 // router setup
 const router = express.Router();
 
-// using param middleware
-// (runs only if certain parameter is in url, in this case 'id')
-router.param("id", tourController.checkID);
-
 // routes
 router
   .route("/")
