@@ -1,4 +1,3 @@
-const fs = require("fs");
 const Tour = require("./../models/tourModel");
 
 exports.getAllTours = async (req, res) => {
@@ -13,7 +12,7 @@ exports.getAllTours = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(400).json({
       status: "failed",
       message: error,
     });
@@ -36,7 +35,7 @@ exports.getTourById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(400).json({
       status: "failed",
       message: error,
     });
@@ -60,15 +59,27 @@ exports.postNewTour = async (req, res) => {
   }
 };
 
-exports.patchTour = (req, res) => {
-  const reqId = req.params.id * 1;
-  const tour = tours.find((el) => el.id === reqId);
+exports.patchTour = async (req, res) => {
+  try {
+    const newTour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // returns new document (updated one)
+      runValidators: true, // validate update operation against the Tour Model's schema
+    });
 
-  res.status(200).json({});
+    res.status(200).json({
+      status: "success",
+      data: {
+        newTour,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Invalid Data !",
+    });
+  }
 };
 
 exports.deleteTour = (req, res) => {
-  const reqId = req.params.id * 1;
-  const tour = tours.find((el) => el.id === reqId);
-  res.status(204).json({});
+  
 };
