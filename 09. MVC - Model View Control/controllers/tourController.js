@@ -80,6 +80,18 @@ exports.patchTour = async (req, res) => {
   }
 };
 
-exports.deleteTour = (req, res) => {
-  
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Invalid Data !",
+    });
+  }
 };
