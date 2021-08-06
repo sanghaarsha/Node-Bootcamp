@@ -13,7 +13,24 @@ exports.getAllTours = async (req, res) => {
     queryStr = JSON.parse(queryStr);
 
     // Querying
-    const query = Tour.find(queryStr);
+    let query = Tour.find(queryStr);
+
+    // Sorting
+    if (req.query.sort) {
+      // sort=price query : ascending
+      // sort=-price query : descending
+      // query = query.sort(req.query.sort);
+
+      // sorting using multiple parameters
+      // splitting sort params by comma and joining by space
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      // default sorting if user does not provide one
+      query = query.sort("-createdAt");
+    }
+
+    // Awaiting document
     const tours = await query;
 
     // RESPONSE
