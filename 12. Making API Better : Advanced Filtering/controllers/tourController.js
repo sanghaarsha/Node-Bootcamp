@@ -2,16 +2,27 @@ const Tour = require("./../models/tourModel");
 
 exports.getAllTours = async (req, res) => {
   try {
+    // Filtering :
     const queryObj = { ...req.query };
-
     // excluding special variable from query params
     const excludeFields = ["page", "sort", "limit", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    // Query chaining
-    const query = Tour.find(queryObj);
+    // Advanced filtering : (<,<=,>,>=)
+    // mongodb method: {difficulty:'easy', duration : {$gte:5} }
+
+    // query we get : {difficulty:'easy', duration : {gte:5} }
+    // fixing all the operators using REGEX in query string:
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    // parsing query into JSON
+    queryStr = JSON.parse(queryStr);
+
+    // using fixed query to find document
+    const query = Tour.find(queryStr);
     const tours = await query;
 
+    // RESPONSE
     res.status(200).json({
       status: "success",
       data: {
