@@ -32,7 +32,21 @@ exports.getAllTours = async (req, res) => {
       query.select("-__v"); // exclude __v data from response
     }
 
-    // Awaiting document
+    // PAGINATION
+    // ?page=2&limit=10 [page:1 1-10, page:2 11-20...]
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    const skip = (page - 1) * limit; // (n-1)*limit
+
+    query = query.skip(skip).limit(limit);
+
+    // if requested page does not exist throw an error
+    if (req.query.page) {
+      const numberOfTours = await Tour.countDocuments();
+      if (skip >= numberOfTours) throw new Error("Page does not exist!");
+    }
+
+    // Awaiting for document
     const tours = await query;
 
     // RESPONSE
@@ -43,7 +57,7 @@ exports.getAllTours = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(404).json({
       status: "failed",
       message: error,
     });
@@ -63,7 +77,7 @@ exports.getTourById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(404).json({
       status: "failed",
       message: error,
     });
@@ -80,7 +94,7 @@ exports.postNewTour = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: "failed",
       message: "Invalid Data !",
     });
@@ -101,7 +115,7 @@ exports.patchTour = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(404).json({
       status: "failed",
       message: "Invalid Data !",
     });
@@ -117,7 +131,7 @@ exports.deleteTour = async (req, res) => {
       data: null,
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(404).json({
       status: "failed",
       message: "Invalid Data !",
     });
