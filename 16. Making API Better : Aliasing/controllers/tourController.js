@@ -1,5 +1,14 @@
 const Tour = require("./../models/tourModel");
 
+// Cheap Five Tours Alias
+exports.aliasCheapFive = (req, res, next) => {
+  req.query.limit = "5";
+  req.query.sort = "price,ratingsAverage";
+  req.query.fields = "name,ratingsAverage,price,summary,difficulty";
+
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   try {
     // Filtering :
