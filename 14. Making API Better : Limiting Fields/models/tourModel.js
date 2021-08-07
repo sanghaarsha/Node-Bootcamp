@@ -50,6 +50,10 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    // if let's say it was a secret and user should never see it
+    // like password or hashes stored we can disable it from being
+    // selected from API query by setting select to false:
+    // select: false,
   },
   startDates: [Date],
 });
